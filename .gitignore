@@ -1,0 +1,5 @@
+virtual/
+.vscode/
+node_modules/
+__pycache__/
+/debug.html

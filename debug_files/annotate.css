@@ -1,0 +1,26 @@
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+tr {
+    border-bottom: 1px solid #b0b0b0;
+}
+
+td.Makefile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+code {
+    color: #0073bf;
+}
+
+.target {
+    background-color: #ffcd3a;
+}
+
+.recipe {
+    background-color: #b5d5ff;
+}
