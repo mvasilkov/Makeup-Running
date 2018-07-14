@@ -14,6 +14,7 @@ class LineType(IntEnum):
     TARGET = auto()
     RECIPE = auto()
     VARIABLE = auto()
+    PHONY = auto()
     OTHER = auto()
 
 
@@ -53,6 +54,10 @@ def _line_type(line: str) -> LineType:
     if result in {':', '::'}:
         if ';' in line:
             raise RuntimeError('Not supported: target line with a semicolon')
+
+        if _target_name(line) == '.PHONY':
+            return LineType.PHONY
+
         return LineType.TARGET
 
     return LineType.VARIABLE
@@ -86,6 +91,7 @@ class Makefile:
         self.path = path
         self.lines = []
         self.targets = {}
+        self.target_from_line_number = {}
 
         self.load()
         self.parse()
@@ -109,3 +115,6 @@ class Makefile:
 
             target = Target(self, _target_name(line), line_number)
             self.targets[f'{target.name}:{line_number}'] = target
+            self.target_from_line_number[line_number] = target
+            for n in target.recipe_lines:
+                self.target_from_line_number[n] = target

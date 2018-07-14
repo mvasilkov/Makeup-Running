@@ -7,6 +7,12 @@ tr {
     border-bottom: 1px solid #b0b0b0;
 }
 
+td.LineType {
+    font-size: 80%;
+    width: 200px;
+}
+
+td.LineType,
 td.Makefile {
     overflow: hidden;
     text-overflow: ellipsis;

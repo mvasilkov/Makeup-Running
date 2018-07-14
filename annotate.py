@@ -1,18 +1,36 @@
 #!/usr/bin/env python3
 
+import html
 import pathlib
 import sys
 import webbrowser
 
-from makeup_running.parser import Makefile
+from makeup_running.parser import Makefile, LineType
 
 
-def print_line(line):
-    pass
+def print_line(f, line_number, line_t) -> str:
+    line_type, line = line_t
+    class_name = 'target' if line_type == LineType.TARGET else 'recipe' if line_type == LineType.RECIPE else ''
+    target = f.target_from_line_number.get(line_number, None)
+    target_name = target.name if target is not None else ''
+    line_header = html.escape(f'{LineType(line_type).name} {target_name}')
+
+    return ''.join([
+        f'<tr title="{line_header}">',
+        f'<td class="LineType {class_name}">{line_header}</td>',
+        f'<td class="Makefile"><code>{html.escape(line)}</code></td>',
+        '</tr>',
+    ])
 
 
-def print_file(f):
-    pass
+def print_file(f) -> str:
+    tab = ['<table>']
+
+    for line_number, line in enumerate(f.lines):
+        tab.append(print_line(f, line_number, line))
+
+    tab.append('</table>')
+    return ''.join(tab)
 
 
 def run(filename: str):
@@ -33,8 +51,8 @@ if __name__ == '__main__':
         sys.exit('Usage: annotate.py [Makefile]')
 
     if argc == 2:
-        filename = sys.argv[1]
+        a = sys.argv[1]
     else:
-        filename = None
+        a = None
 
-    run(filename)
+    run(a)
